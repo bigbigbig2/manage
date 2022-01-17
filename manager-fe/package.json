@@ -1,0 +1,23 @@
+{
+  "name": "manager-fe",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite --mode dev",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^0.2.4",
+    "axios": "^0.24.0",
+    "element-plus": "1.2.0-beta.6",
+    "eslint": "^8.6.0",
+    "vue": "^3.2.22",
+    "vue-router": "4",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.9.3",
+    "sass": "^1.43.4",
+    "vite": "^2.6.4"
+  }
+}
