@@ -110,6 +110,7 @@
 <script>
 import { getCurrentInstance,onMounted,ref,reactive,toRaw} from "vue"
 import { ElMessage } from 'element-plus' //按需引入，全局导入有毛病
+import utils from "../utils/utils";
 export default {
     name:'user',
     setup(){
@@ -123,10 +124,10 @@ export default {
         const userList = ref([]);
 
         //初始化分页对象
-            const paper = reactive({
+        const paper = reactive({
             pageNum:1,
-            pageSize:5,
-            total:0
+            pageSize:10,
+            total:1
         });
         
         //选中用户列表的对象
@@ -169,11 +170,19 @@ export default {
             },
             {
                 label:'注册时间',
-                prop:'createTime'
+                prop:'createTime',
+                width:'190',
+                formatter:(row,column,value)=>{
+                    return utils.formateDate(new Date(value))
+                }
             },
             {
                 label:'最后登录时间',
-                prop:'lastLoginTime'
+                prop:'lastLoginTime',
+                width:190,
+                formatter:(row,column,value)=>{
+                    return utils.formateDate(new Date(value))
+                }
             },
         ])
         

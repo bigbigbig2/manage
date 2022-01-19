@@ -20,7 +20,6 @@ router.post('/login',async (ctx)=>{
      * 2. {userName:1,_id:0} 1为选择，0不选择（替换上边）
      * 3. .select('userId')
      */ 
-    
     const res = await User.findOne({
       userName,
       userPwd
@@ -44,6 +43,42 @@ router.post('/login',async (ctx)=>{
     ctx.body = util.fail(error.msg)
   }
   
+})
+
+router.get('/list',async (ctx)=>{
+  const { userId, userName, state, } = ctx.request.query;
+  const {page,skipIndex} =  util.paper(ctx.request.query);
+  let params = {}
+  if (userId) params.userId = userId;
+  if (userName) params.userName = userName;
+  if (state && state!='0') params.state = state;
+  //根据条件查询所有的用户列表
+  const query = User.find(params,{_id:0,userPwd:0}) //过滤掉这两个字段
+  const list = await query.skip(skipIndex).limit(page.pageSize) //达到分页效果：通过拿到当前在第几页和起始数据
+  //统计获取用户的总条数
+  const total = await User.countDocuments(params);//mongoose自带API
+  
+  try{
+    ctx.body = util.sucess({
+      page:{
+        ...page,
+        total
+      },
+      list
+    })
+  }catch(e){
+    ctx.body = util.fail(`查询异常：${e.stack}`)
+  }
+
+  
+
+
+
+
+  
+
+
+
 })
 
 

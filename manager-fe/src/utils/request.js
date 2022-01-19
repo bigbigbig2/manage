@@ -31,7 +31,7 @@ service.interceptors.response.use((res)=>{
         ElMessage.error(TOKEN_INVALID)
         setTimeout(()=>{
             router.push('/login')
-        },15000)
+        },1500)
         return Promise.reject(TOKEN_INVALID) //这将显示在控制台里
     }else{
         ElMessage.error(msg || NETWORK_ERROR)
