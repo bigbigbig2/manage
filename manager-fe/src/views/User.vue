@@ -140,10 +140,6 @@ export default {
                 prop:'userName'
             },
             {
-                label:'用户邮箱',
-                prop:'userEmail'
-            },
-            {
                 label:'用户ID',
                 prop:'userId'
             },
@@ -167,6 +163,10 @@ export default {
                         3:'试用期'
                     }[value]
                 }
+            },
+            {
+                label:'用户邮箱',
+                prop:'userEmail'
             },
             {
                 label:'注册时间',
@@ -254,7 +254,7 @@ export default {
         }
 
         const handleQuery = ()=>{
-            
+            getUserList();
         }
         //重置表单
         const handleReset = (form)=>{
@@ -283,11 +283,12 @@ export default {
             const res = await proxy.$api.userDel({
                 userIds:checkedUserIds.value
             })
-            if(res.nModified > 0){
+            console.log(res)
+            if(res.modifiedCount > 0){
                 ElMessage.success('删除成功');
                 getUserList();  
             }else{
-                ElMessage.error('修改失败')
+                ElMessage.error('删除失败')
             }
             
             
@@ -329,13 +330,11 @@ export default {
                     let params = toRaw(userForm);  //toRaw：将响应式对象转化为普通对象
                     params.action = action.value 
                     params.userEmail += "@outlook.com";//拼接添加邮箱后缀
-                    let res = proxy.$api.userSubmit(params);
-                    if(res){
-                        showModal.value = false;
-                        ElMessage.success('用户创建成功');
-                        handleReset("dialogForm");
-                        getUserList() //刷新列表
-                    }
+                    await proxy.$api.userSubmit(params);
+                    showModal.value = false;
+                    ElMessage.success('用户创建成功');
+                    handleReset("dialogForm");
+                    getUserList() //刷新列表
                 }
             })
         }

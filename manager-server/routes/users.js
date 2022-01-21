@@ -3,8 +3,10 @@
  */
 const util = require('./../utils/util')
 const User = require('./../models/userSchema')
+const Counter = require('./../models/counterScherma')
 const router = require('koa-router')()
 const jwt = require('jsonwebtoken')
+const md5 = require('md5')
 router.prefix('/users')
 
 //用户登录
@@ -26,7 +28,7 @@ router.post('/login',async (ctx)=>{
     },'userId userName userEmail state role deptId roleList')//只返回指定字段
     //签发token给前端
     const data = res._doc;
-    console.log('data=>',data)
+    // console.log('data=>',data)
     const token = jwt.sign({
       data,
     },'mytoken',{expiresIn: '1h' });
@@ -44,7 +46,7 @@ router.post('/login',async (ctx)=>{
   }
   
 })
-
+//用户列表
 router.get('/list',async (ctx)=>{
   const { userId, userName, state, } = ctx.request.query;
   const {page,skipIndex} =  util.paper(ctx.request.query);
@@ -69,17 +71,81 @@ router.get('/list',async (ctx)=>{
   }catch(e){
     ctx.body = util.fail(`查询异常：${e.stack}`)
   }
+})
 
+//用户删除、批量删除
+router.post('/delete', async (ctx) =>{
+  const { userIds } = ctx.request.body
+  //更新表,这的用户删除其实是更新用户的在职状态，将用户的状态修改为离职
+  //User.updateMany({userId:'10001},{state:2})将用户id为10001的用户的state更新为2
+  // const res = await User.updateMany({ $or:userId},{state:2}) 
+  const res = await User.updateMany({userId:{$in: userIds }}, { state: 2 })
+  //之前的nmodified变成了modifiedCount
+  /*
+  console.log(res);
+  acknowledged: true,
+  modifiedCount: 1,
+  upsertedId: null,
+  upsertedCount: 0,
+  matchedCount: 1 
+  */
+  if(res.modifiedCount){
+    ctx.body = util.sucess(res,`共删除成功${res.modifiedCount}条`)
+  }else{
+    ctx.body = util.fail('删除失败');
+  }
   
-
-
-
-
-  
-
-
 
 })
 
+//用户新增/编辑
+router.post('/operate',async (ctx)=>{
+  const {userId, userName,userEmail,job,mobile,state,roleList,deptId,action} = ctx.request.body;
+  if(action == 'add'){
+    if(!userName || !userEmail || !deptId){
+      ctx.body = util.fail('参数错误',util.CODE.PARAM_ERROR)
+      return;
+    }
+    const res =await User.findOne({$or:[{userName},{userEmail}]},'_id userName userEmail')
+    if(res){
+      //新增时先判断用户是否存在（用户名称和用户邮箱不能和以有的重名）
+      ctx.body = util.fail(`系统监测到有重复的用户，信息如下:${res.userName} - ${res.userEmail}`)
+    }else{
+      const doc = await Counter.findOneAndUpdate({ _id: 'userId' }, { $inc: { sequence_value: 1 } }, { new: true })
+      //用户创建(实例化并将用户添加到表中)
+      try{
+        const user = new User({
+          userId:doc.sequence_value,
+          userName,
+          userPwd:md5('123456'),
+          userEmail,
+          role:1, //默认普通用户
+          roleList,
+          job,
+          state,
+          deptId,
+          mobile
+        })
+        user.save();
+        ctx.body = util.sucess('','用户创建成功');
+      }catch(e){
+        ctx.body = util.fail(e.stack,'用户创建失败');
+      }
+      
+    }
+  }else{
+    //用户编辑
+    if(!deptId){
+      ctx.body = util.fail('部门不能为空',util.CODE.PARAM_ERROR)
+      return;
+    }
+    try{
+      const res = await User.findOneAndUpdate({userId},{job,mobile,state,roleList,deptId})
+      ctx.body = util.sucess({},'更新成功')
+    }catch(error){
+      ctx.body = util.fail(error.stack,'更新失败')
+    }
 
+  }
+})
 module.exports = router
