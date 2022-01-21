@@ -179,7 +179,7 @@ export default {
             {
                 label:'最后登录时间',
                 prop:'lastLoginTime',
-                width:190,
+                width:250,
                 formatter:(row,column,value)=>{
                     return utils.formateDate(new Date(value))
                 }
