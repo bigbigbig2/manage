@@ -36,9 +36,9 @@
                 </el-table-column>
                 <el-table-column label="操作" width="220">
                     <template #default="scope">
-                        <el-button  @click="handleAdd(2,scope.row)"  size="mini">创建</el-button>
+                        <el-button type="primary" @click="handleAdd(2,scope.row)"  size="mini">创建</el-button>
                         <el-button @click="handleEdit(scope.row)"  size="mini">编辑</el-button>
-                        <el-button type="danger" size="mini" @click="handleDel(scope.row)">删除</el-button>
+                        <el-button type="danger" size="mini" @click="handleDel(scope.row._id)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -69,9 +69,9 @@
               <el-form-item label="路由地址" prop="path" v-show="menuForm.menuType==1">
                   <el-input v-model="menuForm.path" placeholder="请输入路由地址"></el-input>
               </el-form-item>
-              <el-form-item label="权限标识" prop="menuCode">
+              <!-- <el-form-item label="权限标识" prop="menuCode">
                   <el-input v-model="menuForm.menuCode" placeholder="请输入权限标识"></el-input>
-              </el-form-item>
+              </el-form-item> -->
               <el-form-item label="组件路径" prop="component" v-show="menuForm.menuType==1">
                   <el-input v-model="menuForm.component" placeholder="请输入组件路径"></el-input>
               </el-form-item>
@@ -200,8 +200,21 @@ export default {
                 this.menuForm.parentId = [...row.parentId,row._id].filter((item) => item);
             }
         },
-        handleEdit(){},
-        handleDel(){},
+        handleEdit(row){
+            this.showModal = true;
+            this.action = 'edit';
+            this.menuForm = row;
+            //清空表单
+            this.$nextTick((row)=>{
+                // this.menuForm = row;
+                Object.assign(this.menuForm,row)
+            });
+        },
+        async handleDel(_id){
+            await this.$api.menuSubmit({_id,action:'delete'});
+            ElMessage.success('删除成功');
+            this.getMenuList()
+        },
         handleSubmit(){
             this.$refs.dialogForm.validate(async (valid)=>{
                 if(valid){
@@ -217,6 +230,9 @@ export default {
         },
         handleClose(){
             this.showModal = false;
+            //重置，清空表单编辑
+            //那为什么在行内点击编辑后在点全局的创建表单内容不是空的？
+            //这是组件内部的机制：会在打开表单的同时将数据初始化上去
             this.handleReset('dialogForm');
         },
 
