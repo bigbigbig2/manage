@@ -6,11 +6,12 @@ const onerror = require('koa-onerror') //错误监听
 const bodyparser = require('koa-bodyparser')//前端请求参数的转换
 //const logger = require('koa-logger') //日志
 var log4js = require("./utils/log4j");
-const users = require('./routes/users')
 const router = require('koa-router')()
 const jwt = require('jsonwebtoken')
 const koajwt =require('koa-jwt')
-const util = require('./utils/util')
+const util = require('./utils/util') 
+const menus = require('./routes/menus')
+const users = require('./routes/users')
 require('./config/db')
 
 // error handler
@@ -40,12 +41,6 @@ app.use(async (ctx, next) => {
       throw err;
     }
   })
-  // const ms = new Date() - start
-  // log.level = "debug";
-  // log.debug("Some debug messages");
-  //console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
-  // log4js.info(`get params: ${JOSN.stringify(ctx.request.query)}`)
-  // log4js.info(`post params: ${JOSN.stringify(ctx.request.query)}`)
   
 })
 
@@ -66,8 +61,9 @@ router.prefix('/api')//加前缀，一级路由
 //   ctx.body='hello';
 // })
 router.use(users.routes(), users.allowedMethods()) //二级路由
+router.use(menus.routes(),menus.allowedMethods())
 
-app.use(router.routes(),router.allowedMethods()) //一级路由
+app.use(router.routes(),router.allowedMethods()) //一级路由（加载所有的路由）
 // error-handling
 app.on('error', (err, ctx) => {
   console.error('server error', err, ctx)
