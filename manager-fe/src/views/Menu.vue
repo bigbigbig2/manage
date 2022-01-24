@@ -69,9 +69,9 @@
               <el-form-item label="路由地址" prop="path" v-show="menuForm.menuType==1">
                   <el-input v-model="menuForm.path" placeholder="请输入路由地址"></el-input>
               </el-form-item>
-              <!-- <el-form-item label="权限标识" prop="menuCode">
+              <el-form-item label="权限标识" prop="menuCode " v-show="menuForm.menuType==2">
                   <el-input v-model="menuForm.menuCode" placeholder="请输入权限标识"></el-input>
-              </el-form-item> -->
+              </el-form-item>
               <el-form-item label="组件路径" prop="component" v-show="menuForm.menuType==1">
                   <el-input v-model="menuForm.component" placeholder="请输入组件路径"></el-input>
               </el-form-item>
@@ -156,6 +156,7 @@ export default {
             ],
             showModal:false,
             menuForm:{
+                parentId:[null],
                 menuType:1,
                 menuState:1
             },

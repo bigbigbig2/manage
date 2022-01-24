@@ -23,7 +23,7 @@ export default{
             url:'/menu/list',
             method:'get',
             data:params,
-            mock:true
+            mock:false
 
         })
     },

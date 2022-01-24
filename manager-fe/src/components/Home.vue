@@ -42,7 +42,7 @@ export default{
         const list = await this.$api.getMenuList();
         this.userMenu = list;
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     },
   },
