@@ -43,11 +43,20 @@ export default{
             mock:false
         })
     },
-    getRoleList(){
+    //拉取所有的角色列表
+    getRoleAllList(){
         return request({
             url:'/roles/allList',
             method:'get',
             data:{},
+            mock:true
+        })
+    },
+    getRoleList(params){
+        return request({
+            url:'/roles/list',
+            method:'get',
+            data:params,
             mock:true
         })
     },
@@ -73,6 +82,15 @@ export default{
             method:'post',
             data:params,
             mock:false
+        })
+    },
+    //角色的创建，编辑，删除
+    roleOpreate(params){
+        return request({
+            url:'/roles/operate',
+            method:'post',
+            data:params,
+            mock:true
         })
     }
 }
