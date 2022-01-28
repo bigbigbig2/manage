@@ -1,28 +1,27 @@
 <script >
-import TreeMenu from './TreeMenu.vue'
-import BreadCrumb from './BreadCrumb.vue'
+import TreeMenu from "./TreeMenu.vue";
+import BreadCrumb from "./BreadCrumb.vue";
 // 一个用户图像+密码锁图标
-import { Bell,Fold,Expand} from "@element-plus/icons-vue";
+import { Bell, Fold, Expand } from "@element-plus/icons-vue";
 
-export default{
-  name:"home",
-  components:{TreeMenu,Bell,Fold,BreadCrumb,Expand},
-  data(){
+export default {
+  name: "home",
+  components: { TreeMenu, Bell, Fold, BreadCrumb, Expand },
+  data() {
     return {
-      isCollapse:false,
-      userInfo:this.$store.state.userInfo,
+      isCollapse: false,
+      userInfo: this.$store.state.userInfo,
       userMenu: [],
-      noticeCount:0,
+      noticeCount: 0,
       activeMenu: location.hash.slice(1), //获取当前页面url地址来渲染到到当前点击的menu
-
-    }
+    };
   },
-  methods:{
-    toggle(){
+  methods: {
+    toggle() {
       this.isCollapse = !this.isCollapse;
     },
     //退出当前账号
-    handleLogout(key) { 
+    handleLogout(key) {
       if (key == "email") return;
       this.$store.commit("saveUserInfo", "");
       this.userInfo = null;
@@ -30,7 +29,7 @@ export default{
     },
     async getNoticeCount() {
       try {
-        const count = await this.$api.noticeCount();//接口返回的通知数量值
+        const count = await this.$api.noticeCount(); //接口返回的通知数量值
         this.noticeCount = count;
       } catch (error) {
         console.error(error);
@@ -50,11 +49,11 @@ export default{
     this.getNoticeCount();
     this.getMenuList();
   },
-}
+};
 </script>
 
 <template>
-  <div class ="basic-layout">
+  <div class="basic-layout">
     <!-- 左边导航菜单 -->
     <div :class="['nav-side', isCollapse ? 'fold' : 'unfold']">
       <!-- 系统LOGO -->
@@ -63,13 +62,13 @@ export default{
         <span>SINCERE</span>
       </div>
       <el-menu
-        :default-active="activeMenu" 
+        :default-active="activeMenu"
         background-color="#304156"
         text-color="#fffff"
-        
         router
         :collapse="isCollapse"
-        class="nav-menu">
+        class="nav-menu"
+      >
         <tree-menu :userMenu="userMenu" />
       </el-menu>
     </div>
@@ -78,9 +77,9 @@ export default{
       <div class="nav-top">
         <div class="nav-left">
           <div class="menu-fold" @click="toggle">
-            <el-icon >
-              <expand v-if="isCollapse" style="cursor:pointer;" />
-              <fold v-else style="cursor:pointer;" />
+            <el-icon>
+              <expand v-if="isCollapse" style="cursor: pointer" />
+              <fold v-else style="cursor: pointer" />
             </el-icon>
           </div>
           <div class="bread">
@@ -103,29 +102,31 @@ export default{
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item command="email">邮箱：{{ userInfo.userEmail }}</el-dropdown-item>
-                <el-dropdown-item command="logout" >退出</el-dropdown-item>
+                <el-dropdown-item command="email"
+                  >邮箱：{{ userInfo.userEmail }}</el-dropdown-item
+                >
+                <el-dropdown-item command="logout">退出</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
         </div>
       </div>
       <div class="wrapper">
-          <router-view></router-view>
+        <router-view></router-view>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="scss">
-.basic-layout{
-  position:relative;
-  .nav-side{
+.basic-layout {
+  position: relative;
+  .nav-side {
     position: fixed;
-    width:200px;
-    height:100vh;
+    width: 200px;
+    height: 100vh;
     background-color: #304156;
-    color:#fff;
+    color: #fff;
     overflow-y: auto; //设置滚动条
     transition: width 0.5s; //设置左侧导航栏向左收起时的动画
     .nav-menu {
@@ -135,9 +136,9 @@ export default{
     // 合并
     &.fold {
       width: 64px;
-      overflow:hidden;
+      overflow: hidden;
       transition: 0.7s;
-      .logo{
+      .logo {
         display: flex;
         align-content: center;
         justify-content: center;
@@ -157,9 +158,9 @@ export default{
     // 展开
     &.unfold {
       width: 200px;
-      overflow:hidden;
+      overflow: hidden;
       transition: 0.7s;
-      .logo{
+      .logo {
         display: flex;
         align-content: center;
         justify-content: center;
@@ -172,12 +173,12 @@ export default{
           height: 32px;
         }
         span {
-          margin-top:15px;
+          margin-top: 15px;
         }
       }
     }
   }
-  .content-right{
+  .content-right {
     margin-left: 200px; //左侧固定，右侧自适应
     // 合并
     &.fold {
@@ -189,12 +190,12 @@ export default{
       margin-left: 200px;
       transition: 0.7s;
     }
-    .nav-top{
-      height:50px;
-      line-height:50px;
-      display:flex;
+    .nav-top {
+      height: 50px;
+      line-height: 50px;
+      display: flex;
       justify-content: space-between; //文位于两边
-      border-bottom:1px solid #ddd; //便于与下边content区分开赖
+      border-bottom: 1px solid #ddd; //便于与下边content区分开赖
       padding: 0 20px;
       .nav-left {
         display: flex;
@@ -215,18 +216,17 @@ export default{
         }
       }
     }
-    .wrapper{
+    .wrapper {
       background: #eef0f3;
       padding: 20px;
       // height: calc(100vh - 50px);
       height: 100%;
-      .main-page{
+      .main-page {
         background: #fff;
         height: 100%;
         // height: calc(100vh - 50px);
       }
     }
-
   }
 }
 </style>

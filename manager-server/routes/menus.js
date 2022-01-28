@@ -27,6 +27,7 @@ router.post('/operate',async (ctx)=>{
     ctx.body = util.sucess('',info);
 })
 //菜单列表查询
+//测试
 router.get('/list',async (ctx)=>{
     const { menuName, menuState} =ctx.request.query;
     const params = {}
