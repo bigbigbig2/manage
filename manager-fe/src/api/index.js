@@ -92,5 +92,14 @@ export default{
             data:params,
             mock:true
         })
+    },
+    //权限设置提交接口
+    updatePermission(params) {
+        return request({
+            url:'/roles/update/permission',
+            method:'post',
+            data:params,
+            mock:true
+        })
     }
 }
