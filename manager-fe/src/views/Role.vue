@@ -137,8 +137,9 @@ export default {
             let names = [];
             let list = value.halfCheckedKeys || [];
             list.map((key) => {
-              if (key) {
-                names.push(this.actionMap[key]);
+              let name = this.actionMap[key];
+              if (key && name) {
+                names.push(name);
               }
             });
             return names.join(",");
@@ -151,10 +152,18 @@ export default {
             return utils.formateDate(new Date(value));
           },
         },
+        {
+          label: "更新时间",
+          prop: "updateTime",
+          formatter(row, column, value) {
+            return utils.formateDate(new Date(value));
+          },
+        },
       ],
       pager: {
         pageSize: 10,
         total: 0,
+        pageNum: 1,
       },
       rules: {
         roleName: [
@@ -183,9 +192,12 @@ export default {
     //角色列表
     async getRoleList() {
       try {
-        let { list, page } = await this.$api.getRoleList(this.queryForm);
-        this.pager.total = page.total;
+        let { list, page } = await this.$api.getRoleList(
+          this.queryForm,
+          this.pager
+        );
         this.roleList = list;
+        this.pager.total = page.total;
       } catch (e) {
         console.log(e);
       }
@@ -218,7 +230,11 @@ export default {
       this.action = "edit";
       this.showModal = true;
       this.$nextTick(() => {
-        this.roleForm = row;
+        this.roleForm = {
+          _id: row._id,
+          roleName: row.roleName,
+          remark: row.remark,
+        };
       });
       this.getRoleList();
     },
@@ -247,7 +263,10 @@ export default {
         }
       });
     },
-    handleCurrentChange() {},
+    handleCurrentChange(current) {
+      this.pager.pageNum = current;
+      this.getRoleList();
+    },
     //点击设置权限按钮
     handleOpenPermission(row) {
       this.curRoleName = row.roleName;
