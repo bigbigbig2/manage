@@ -202,12 +202,12 @@ export default {
             }
         },
         handleEdit(row){
-            this.showModal = true;
             this.action = 'edit';
-            this.menuForm = row;
+            this.showModal = true;
+            this.menuForm = row;d
             //清空表单
             this.$nextTick((row)=>{
-                // this.menuForm = row;
+                //this.menuForm = row;
                 Object.assign(this.menuForm,row)
             });
         },

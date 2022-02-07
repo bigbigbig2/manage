@@ -5,8 +5,8 @@ export default{
   data(){
     return{
       user:{
-        userName:'',
-        userPwd:''
+        userName:'admin',
+        userPwd:'admin'
       },
       //表单校验
       rules:{

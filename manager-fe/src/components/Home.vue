@@ -128,7 +128,7 @@ export default {
     background-color: #304156;
     color: #fff;
     overflow-y: auto; //设置滚动条
-    transition: width 0.5s; //设置左侧导航栏向左收起时的动画
+    transition:width 0.5s; //设置左侧导航栏向左收起时的动画
     .nav-menu {
       height: calc(100vh - 50px);
       border-right: none;
@@ -137,7 +137,7 @@ export default {
     &.fold {
       width: 64px;
       overflow: hidden;
-      transition: 0.7s;
+      transition:width 0.5s;
       .logo {
         display: flex;
         align-content: center;
@@ -159,7 +159,7 @@ export default {
     &.unfold {
       width: 200px;
       overflow: hidden;
-      transition: 0.7s;
+      transition:width 0.5s;
       .logo {
         display: flex;
         align-content: center;
@@ -183,12 +183,12 @@ export default {
     // 合并
     &.fold {
       margin-left: 64px;
-      transition: 0.7s;
+      transition: 0.5s;
     }
     // 展开
     &.unfold {
       margin-left: 200px;
-      transition: 0.7s;
+      transition: 0.5s;
     }
     .nav-top {
       height: 50px;

@@ -8,7 +8,7 @@ export default{
   <div class="welcome">
     <div class="content">
       <div class="sub-title">欢迎使用</div>
-      <div class="title">xxx企业后台管理系统</div>
+      <div class="title">企业通用后台管理系统</div>
     </div>
     <div class="img"></div>
   </div>
