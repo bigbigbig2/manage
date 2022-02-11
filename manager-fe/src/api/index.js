@@ -35,6 +35,15 @@ export default{
             mock:false
         })
     },
+    //获取所有的用户列表
+    getAllUserList(){
+        return request({
+            url:'/users/all/list',
+            method:'get',
+            data:{},
+            mock:true
+        })
+    },
     userDel(params){
         return request({
             url:'/users/delete',
@@ -67,6 +76,16 @@ export default{
             data:{},
             mock:true
         })
+    },
+    deptOpreate(params) {
+        return request({
+            url: '/dept/operate',
+            method: 'post',
+            data: params,
+            mock:true
+        })
+        
+        
     },
     userSubmit(params){
         return request({
