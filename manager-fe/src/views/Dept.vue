@@ -39,7 +39,7 @@
       </div>
       <!-- 对话框 -->
       <el-dialog :title ="action =='create'?'创建部门':'编辑部门'" v-model="showModal" >
-        <el-form ref="dialogForm" :model="deptForm" :rules="rules" label-width="120px">
+        <el-form ref="dialogForm" :model="deptForm" :rules="rules" label-width="100px">
           <el-form-item label="上级部门" prop="parentId">
             <el-cascader 
               placeholder="请选择上级部门" 
@@ -50,8 +50,8 @@
               :show-all-levels="true"
             ></el-cascader>
           </el-form-item>
-          <el-form-item label="部门名称" prop="deptName">
-            <el-input placeholder="请输入部门名称" v-model="deptForm.deptName"></el-input>
+          <el-form-item label="部门名称" prop="deptName" >
+            <el-input placeholder="请输入部门名称" v-model="deptForm.deptName" width="40px"></el-input>
           </el-form-item>
           <el-form-item label="负责人" prop="user">
             <el-select placeholder="请选择部门负责人" v-model="deptForm.user" @change="handleUser">
@@ -63,11 +63,12 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="负责人邮箱" prop="userEmail">
+          <el-form-item label="负责人邮箱" prop="userEmail" >
             <el-input
               placeholder="请输入负责人邮箱"
               v-model="deptForm.userEmail"
               disabled
+              width="50px"
             ></el-input>
           </el-form-item>
         </el-form>
@@ -112,6 +113,7 @@
         action:'create',
         showModal:false,
         deptForm:{
+          parentId:[null]
         },
         rules:{
           parentId:[
@@ -141,11 +143,10 @@
     mounted() {
       this.getDeptList();
       this.getAllUserList();
-      console.log(this.deptForm.user);
     },
     methods: {
       async getDeptList(){
-        let list = await this.$api.getDeptList();
+        let list = await this.$api.getDeptList(this.queryForm);
         this.deptList = list;
       },
       //实现表单重置功能
@@ -194,12 +195,10 @@
           if (valid) {
             let params = {...this.deptForm,action:this.action}
             delete params.user;
-            let res = await this.$api.deptOpreate(params);
-            if(res){
-              ElMessage.success("创建成功");
-              this.handleClose();
-              this.getDeptList();
-            }
+            await this.$api.deptOpreate(params);
+            ElMessage.success("操作成功");
+            this.handleClose();
+            this.getDeptList();
           }
         })
       }

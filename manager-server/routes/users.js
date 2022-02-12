@@ -148,4 +148,15 @@ router.post('/operate',async (ctx)=>{
 
   }
 })
+
+//只获取用户名称，用户id，用户name
+router.get('/all/list', async (ctx) => {
+  try {
+    const list =await User.find({}, "userId userName userEmail")
+    ctx.body = util.sucess(list)
+  } catch (error) {
+    ctx.body = util.fail(error.stack)
+  } 
+})
+
 module.exports = router

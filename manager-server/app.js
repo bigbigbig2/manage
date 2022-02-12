@@ -13,6 +13,7 @@ const util = require('./utils/util')
 const menus = require('./routes/menus')
 const users = require('./routes/users')
 const roles = require('./routes/roles')
+const depts = require('./routes/depts')
 require('./config/db')
 
 // error handler
@@ -63,7 +64,8 @@ router.prefix('/api')//加前缀，一级路由
 // })
 router.use(users.routes(), users.allowedMethods()) //二级路由
 router.use(menus.routes(),menus.allowedMethods())
-router.use(roles.routes(),roles.allowedMethods())
+router.use(roles.routes(), roles.allowedMethods())
+router.use(depts.routes(),depts.allowedMethods())
 
 app.use(router.routes(),router.allowedMethods()) //一级路由（加载所有的路由）
 // error-handling
