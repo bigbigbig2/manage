@@ -28,18 +28,17 @@ router.post('/login',async (ctx)=>{
     },'userId userName userEmail state role deptId roleList')//只返回指定字段
     //签发token给前端
     const data = res._doc;
-    // console.log('data=>',data)
+    //console.log('data=>',data)
     const token = jwt.sign({
       data,
-    },'mytoken',{expiresIn: '1h' });
-    // console.log('token=>',token)
+    },'mytoken',{expiresIn: '2h' });
+    console.log('token=>',token)
     //数据表里有和用户登录输入的相同的账号密码
     if(res){
       data.token = token;
       ctx.body = util.sucess(data)
     }else{
       ctx.body = util.fail("账号或密码不正确")
-
     }
   } catch (error){
     ctx.body = util.fail(error.msg)

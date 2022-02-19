@@ -7,19 +7,20 @@ import storage from './storage'
 
 const TOKEN_INVALID = 'Token认证失败，请重新登录'
 const NETWORK_ERROR = '网络请求异常，请稍后重试'
-
 //创建axios实例对象，添加全局配置
 const service = axios.create({
     baseURL:config.baseApi,
-    timeout:8000
+    timeout:5000
 })
 
 //请求拦截(拦截下来给它添加token)
 service.interceptors.request.use((req)=>{
     const headers = req.headers;
-    const {token} = storage.getItem('userInfo');
-    if (!headers.Authorization) headers.Authorization = 'Bearer ' + token;
+    console.log(headers)
+    const {token} = storage.getItem('userInfo')||'';
+    if (!headers.Authorization) headers.Authorization = 'Bearer ' + token
     return req;
+    
 })
 
 //响应拦截
@@ -43,7 +44,7 @@ service.interceptors.response.use((res)=>{
 function request(options){
     options.method = options.method || 'get'
     //将get的请求参数params改为和post请求参数相同的data，这样在项目中就不用过度的去区分get请求还是post请求
-    if (options.method.toLowerCase() === 'get'){
+    if (options.method.toLowerCase() == 'get'){
         options.params = options.data
     }
     let isMock = config.mock;
@@ -58,15 +59,15 @@ function request(options){
     }
     return service(options)
 }
-//将一些静态属性添加到request函数上
-// ['get','post','put','delete','patch'].forEach((item)=>{
-//     request[item] = (url,data,options) => {
-//         return request({
-//             url,
-//             data,
-//             method:item,
-//             ...options
-//         })
-//     }
-// })
+['get', 'post', 'put', 'delete', 'patch'].forEach((item) => {
+    request[item] = (url, data, options) => {
+        return request({
+            url,
+            data,
+            method: item,
+            ...options
+        })
+    }
+})
+
 export default request;

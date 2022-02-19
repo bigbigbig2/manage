@@ -4,17 +4,17 @@ const EnvConfig = {
     //开发环境
     dev:{
         baseApi:'/api',
-        mockApi:'https://www.fastmock.site/mock/4c22c0ad9395bacbad44194547bc0155/api'
+        mockApi:'http://heymock.uneedcode.com/mock/c67527ec1037a017/api'
     },
     //测试环境
     test:{
         baseApi:'/api',
-        mockApi:'https://www.fastmock.site/mock/4c22c0ad9395bacbad44194547bc0155/api'
+        mockApi:'http://heymock.uneedcode.com/mock/c67527ec1037a017/api'
     },
     //生产环境
     prod:{
         baseApi:'/api',
-        mockApi:'' //生产环境通常不需要mockApis
+        mockApi:'http://heymock.uneedcode.com/mock/c67527ec1037a017/api' //生产环境通常不需要mockApis
     }
 } 
 export default {

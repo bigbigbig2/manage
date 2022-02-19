@@ -4,9 +4,10 @@ import request from './../utils/request'
 export default{
     login(params){
         return request({
-            url:'/user/login',
+            url:'/users/login',
             method:'post',
-            data:params,
+            data: params,
+            mock: false
         })
 
     },

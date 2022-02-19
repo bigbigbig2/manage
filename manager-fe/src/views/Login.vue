@@ -41,24 +41,25 @@ export default{
         
         if(valid){
           //方法一，直接使用封装好的request发送请求 
-          this.$request({
-            url:'/users/login',
-            method:'post',
-            data:this.user,
-            mock:false
-          }).then((res) =>{
-            //登录成功后将返回的数据存储到vuex和localstorage中
-            this.$store.commit('saveUserInfo',res);
-            //登录成功后跳转到首页
-            this.$router.push('/welcome');
-            
-          })
-          //方法二：在api/index.js中集中管理(then哪里有问题，先用上边的方法吧)
-          // console.log(this.$store.state.userInfo)
-          // this.$api.login(this.user).then((res)=>{
-          //   this.$store.commit("saveUserInfo", res);
-          //   this.$router.push("/welcome");
+          // this.$request({
+          //   url:'/users/login',
+          //   method:'post',
+          //   data:this.user,
+          //   mock:false
+          // }).then((res) =>{
+          //   //登录成功后将返回的数据存储到vuex和localstorage中
+          //   this.$store.commit('saveUserInfo',res);
+          //   //登录成功后跳转到首页
+          //   this.$router.push('/welcome');
           // })
+
+          //方法二(推荐)：在api/index.js中集中管理
+          //console.log(this.$store.state.userInfo)
+          this.$api.login(this.user).then((res)=>{
+            //console.log(res)
+            this.$store.commit("saveUserInfo", res);
+            this.$router.push("/welcome");
+          })
         }else{
           return false;
         }

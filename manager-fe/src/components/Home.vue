@@ -3,6 +3,7 @@ import TreeMenu from "./TreeMenu.vue";
 import BreadCrumb from "./BreadCrumb.vue";
 // 一个用户图像+密码锁图标
 import { Bell, Fold, Expand } from "@element-plus/icons-vue";
+import axios from "axios";
 
 export default {
   name: "home",
@@ -24,16 +25,13 @@ export default {
     handleLogout(key) {
       if (key == "email") return;
       this.$store.commit("saveUserInfo", "");
-      this.userInfo = null;
+      this.userInfo = {};
       this.$router.push("/login");
     },
-    async getNoticeCount() {
-      try {
-        const count = await this.$api.noticeCount(); //接口返回的通知数量值
+    getNoticeCount() {
+        const count = this.$api.noticeCount(); //接口返回的通知数量值
+        //axios.get("http://heymock.uneedcode.com/mock/c67527ec1037a017/api/leave/count").then((res) => {console.log(res)})
         this.noticeCount = count;
-      } catch (error) {
-        console.error(error);
-      }
     },
     //获取菜单列表
     async getMenuList() {
