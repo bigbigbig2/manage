@@ -36,7 +36,7 @@ export default {
     //获取菜单列表
     async getMenuList() {
       try {
-        const list = await this.$api.getMenuList();
+        const list = await this.$api.gerPermissionList();
         this.userMenu = list;
       } catch (error) {
         console.log(error);

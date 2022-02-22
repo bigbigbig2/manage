@@ -3,7 +3,9 @@
  */
 const util = require('./../utils/util')
 const User = require('./../models/userSchema')
+const Menu = require('./../models/menuSchema')
 const Counter = require('./../models/counterScherma')
+const Role = require('./../models/roleSchema')
 const router = require('koa-router')()
 const jwt = require('jsonwebtoken')
 const md5 = require('md5')
@@ -25,19 +27,20 @@ router.post('/login',async (ctx)=>{
     const res = await User.findOne({
       userName,
       userPwd
-    },'userId userName userEmail state role deptId roleList')//只返回指定字段
-    //签发token给前端
-    const data = res._doc;
-    //console.log('data=>',data)
-    const token = jwt.sign({
-      data,
-    },'mytoken',{expiresIn: '2h' });
-    console.log('token=>',token)
-    //数据表里有和用户登录输入的相同的账号密码
-    if(res){
+    }, 'userId userName userEmail state role deptId roleList')//只返回指定字段
+    console.log(res)
+    if (res) {
+      //签发token给前端
+      const data = res._doc;
+      //console.log('data=>',data)
+      const token = jwt.sign({
+        data
+      },'mytoken',{expiresIn: '2h' });
+      // console.log('token=>',token)
+      //数据表里有和用户登录输入的相同的账号密码
       data.token = token;
       ctx.body = util.sucess(data)
-    }else{
+    } else {
       ctx.body = util.fail("账号或密码不正确")
     }
   } catch (error){
@@ -157,5 +160,33 @@ router.get('/all/list', async (ctx) => {
     ctx.body = util.fail(error.stack)
   } 
 })
+//获取用户对应的权限菜单
+router.get("/getPermissionList", async (ctx) => {
+  //首先要对token解码(获取用户的角色)
+  let authorization = ctx.request.headers.authorization;
+  let { data } = util.decode(authorization)
+  let menuList =await getMenuList(data.role,data.roleList)
+  ctx.body = util.sucess(menuList);
+})
+async function getMenuList(userRole, roleKeys) {
+  let rootList
+  //管理员身份时
+  if (userRole == 0) {
+    rootList =await Menu.find({})||[]
+  } else {
+    //根据用户拥有的角色获取角列表
+    //先查找用户对应的角色有哪些
+    let roleList = await Role.find({ _id: { $in: roleKeys } })
+    let permissionList = []
+    //聚合用户拥有角色中的重复权限（过滤掉重复的，去重）
+    roleList.map(role => {
+      let { checkedKeys, halfCheckedKeys } = role.permissionList;
+      permissionList = permissionList.concat([...checkedKeys,...halfCheckedKeys])
+    })
+    permissionList = [...new Set(permissionList)]
+    rootList = await Menu.find({ _id: { $in: permissionList } })
+  }
+  return util.getTreeMenu(rootList,null,[])
+}
 
 module.exports = router
