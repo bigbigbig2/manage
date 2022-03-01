@@ -36,15 +36,17 @@ export default {
     //获取菜单列表
     async getMenuList() {
       try {
-        const list = await this.$api.gerPermissionList();
-        this.userMenu = list;
+        const {menuList,actionList} = await this.$api.gerPermissionList();
+        this.userMenu = menuList;
+        this.$store.commit("saveUserMenu",menuList)
+        this.$store.commit("saveUserAction",actionList)
       } catch (error) {
         console.log(error);
       }
     },
   },
   mounted() {
-    this.getNoticeCount();
+    //this.getNoticeCount();
     this.getMenuList();
   },
 };

@@ -12,14 +12,14 @@
                   </el-select>
               </el-form-item>
               <el-form-item>
-                  <el-button type = "primary" @click="handleQuery">查询</el-button>
+                  <el-button type = "primary" @click="handleQuery" v-has="'menu-query'">查询</el-button>
                   <el-button @click="handleReset('form')">重置</el-button>
               </el-form-item>
           </el-form>
       </div>
       <div class="base-table">
             <div class="action" >
-              <el-button type="primary" @click="handleAdd(1)">创建</el-button>
+              <el-button type="primary" @click="handleAdd(1)" v-has="'menu-create'">创建</el-button>
             </div>
             <el-table :data="menuList"
                 row-key="_id"
@@ -36,9 +36,9 @@
                 </el-table-column>
                 <el-table-column label="操作" width="220">
                     <template #default="scope">
-                        <el-button type="primary" @click="handleAdd(2,scope.row)"  size="mini">创建</el-button>
-                        <el-button @click="handleEdit(scope.row)"  size="mini">编辑</el-button>
-                        <el-button type="danger" size="mini" @click="handleDel(scope.row._id)">删除</el-button>
+                        <el-button type="primary" @click="handleAdd(2,scope.row)"  size="mini" v-has="'menu-create'">创建</el-button>
+                        <el-button @click="handleEdit(scope.row)"  size="mini" v-has="'menu-edit'">编辑</el-button>
+                        <el-button type="danger" size="mini" @click="handleDel(scope.row._id)" v-has="'menu-delete'">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>

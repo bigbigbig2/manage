@@ -165,8 +165,10 @@ router.get("/getPermissionList", async (ctx) => {
   //首先要对token解码(获取用户的角色)
   let authorization = ctx.request.headers.authorization;
   let { data } = util.decode(authorization)
-  let menuList =await getMenuList(data.role,data.roleList)
-  ctx.body = util.sucess(menuList);
+  let menuList = await getMenuList(data.role, data.roleList)
+  //防止下边的getActionList内的语句对menuList本身造成影响，所以下面使用深拷贝使其变成一个新的对象
+  let actionList = getActionList(JSON.parse(JSON.stringify(menuList)))
+  ctx.body = util.sucess({ menuList, actionList });
 })
 async function getMenuList(userRole, roleKeys) {
   let rootList
@@ -188,5 +190,27 @@ async function getMenuList(userRole, roleKeys) {
   }
   return util.getTreeMenu(rootList,null,[])
 }
+
+function getActionList(list) {
+  const actionList = []
+  const deep = (arr) => {
+        while (arr.length) {
+          let item = arr.pop();
+          //如果菜单列表里下有actio则为有按钮
+          if (item.action) {
+            item.action.map(action => {
+              //menuCode字段为，菜单管理下的权限标识
+              actionList.push(action.menuCode)
+            })
+          }
+          //不是按钮，是菜单时
+          if (item.children && !item.action) {
+            deep(item.children);//递归继续查找
+          }
+        }
+  };
+  deep(list)
+  return actionList
+};
 
 module.exports = router
