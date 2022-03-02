@@ -30,7 +30,6 @@ export default {
     },
     getNoticeCount() {
         const count = this.$api.noticeCount(); //接口返回的通知数量值
-        //axios.get("http://heymock.uneedcode.com/mock/c67527ec1037a017/api/leave/count").then((res) => {console.log(res)})
         this.noticeCount = count;
     },
     //获取菜单列表

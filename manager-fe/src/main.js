@@ -15,7 +15,7 @@ const app= createApp(App)
 
 app.directive('has', {
     beforeMount(el, binding) {
-        console.log(el, binding)
+        // console.log(el, binding)
         //获取按钮权限
         let actionList = storage.getItem("actionList")
         let value = binding.value

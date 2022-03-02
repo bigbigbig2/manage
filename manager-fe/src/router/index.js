@@ -1,5 +1,6 @@
 import { createRouter,createWebHashHistory} from 'vue-router';
 import Home from '@/components/Home.vue';
+import request from './../utils/request'
 
 const routes=[
     {
@@ -66,17 +67,61 @@ const routes=[
     },
     {
         name:'404',
-        path:'/404',
+        path:"/:pathMatch(.*)*",
         meta:{
             title:'404页面'
         },
         component:()=>import('@/views/404.vue')
     }
+
 ]
 
 const router = createRouter({
     history: createWebHashHistory(),
     routes
 })
+// async function getMenuList(){
+//    const {menuList} =await request({
+//             url:'/users/getPermissionList',  
+//             method:'get',
+//             data:{},
+//             mock:false
+
+//    })
+//     const arr = menuList[0].children
+//     const pathList = []
+//     arr.some(function(item) {
+//         pathList.push(item.path)
+//     })
+//     router.beforeEach( (to,from,next) => {
+//         if (to.path === "/system/user") {
+//             if (pathList.includes('/system/user')) {
+//                 return next()
+//             } else {
+//                 return next('/welcome')
+//             }
+//         }
+//         if (to.path === "/system/role") {
+//             if (pathList.includes('/system/role')) {
+//                 return next()
+//             } else {
+//                 return next('/welcome')
+//             }
+//         }
+//         if (to.path === "/system/menu") {
+//             if (pathList.includes('/system/menu')) {
+//                 console.log('sb')
+//                 return next()
+//             }
+//         }
+//         if (to.path === "/system/dept") {
+//             if (pathList.includes('/system/dept')) {
+//                 return next()
+//             }
+//         } 
+            
+//     })
+// }
+getMenuList()
 
 export default router;
