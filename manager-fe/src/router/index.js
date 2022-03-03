@@ -80,6 +80,14 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes
 })
+
+router.beforeEach((to,from,next)=>{
+    if(to.meta.title){
+        document.title = to.meta.title
+    }
+    next()  
+})
+
 // async function getMenuList(){
 //    const {menuList} =await request({
 //             url:'/users/getPermissionList',  
@@ -122,6 +130,5 @@ const router = createRouter({
             
 //     })
 // }
-getMenuList()
 
 export default router;
