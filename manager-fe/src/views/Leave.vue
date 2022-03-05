@@ -32,9 +32,9 @@
         >
         </el-table-column>
         <el-table-column label="操作" width="150">
-                <template>
-                    <el-button  size="mini">查看</el-button>
-                    <el-button type="danger" size="mini" >作废</el-button>
+                <template #default="scope">
+                    <el-button  size="mini" @click="handleShowDetail(scope.row)">查看</el-button>
+                    <el-button type="danger" size="mini" @click = handleDetailDelete(scope.row._id) v-if="[1,2].includes(scope.row.applyState)">作废</el-button>
                 </template>
         </el-table-column>
         </el-table>
@@ -99,6 +99,33 @@
             <el-button type="primary" @click="handleSubmit" >确定</el-button>
         </span>
     </template>
+    </el-dialog>
+    <el-dialog title="休假申请详情" v-model="showDetailModal" width="50%" destroy-on-close>
+        <el-steps :active="detail.applyState >2?3:detail.applyState" align-center>
+            <el-step title="待审批"></el-step>
+            <el-step title="审批中"></el-step>
+            <el-step title="审批通过/拒绝"></el-step>
+        </el-steps>
+        <el-form label-width="120px" label-suffix=":">
+            <el-form-item label="休假类型">
+                <div>{{detail.applyTypeName}}</div> 
+            </el-form-item>
+            <el-form-item label="休假时间">
+                <div>{{detail.time}}</div> 
+            </el-form-item>
+            <el-form-item label="休假时长">
+                <div>{{detail.leaveTime}}</div>  
+            </el-form-item>
+            <el-form-item label="休假原因">
+                <div>{{detail.reasons}}</div> 
+            </el-form-item>
+            <el-form-item label="审批状态">
+                <div>{{detail.applyStateName}}</div> 
+            </el-form-item>
+            <el-form-item label="审批人">
+                <div>{{detail.curAuditUserName}}</div> 
+            </el-form-item>
+        </el-form>
     </el-dialog>
   </div>
 </template>
@@ -183,7 +210,7 @@ export default {
                 }
             }
         ])
-
+        //休假申请填写表单
         const leaveForm =reactive ({
             applyType:1,
             startTime:'',
@@ -196,9 +223,9 @@ export default {
         //休假列表
         const applyList = ref([])
 
-        //
         const showModal = ref(false)
 
+        const showDetailModal =ref(false)
         const action = ref('create')
 
         const rules = reactive({
@@ -227,6 +254,8 @@ export default {
                 }
             ]
         })
+
+        const detail = ref({});
 
         onMounted(()=>{
             getApplyList()
@@ -284,6 +313,33 @@ export default {
             }
         }
 
+        const handleShowDetail = (row)=>{
+            let data = {...row};
+            //映射成一个新的对象，下面对row的数据做一下加工然后在显示出来
+            data.applyTypeName = {
+                1:'事假',
+                2:'调休',
+                3:'年假'
+            }[data.applyType];
+            data.time =utils.formateDate(new Date(row.startTime),"yyyy-MM-dd") + "至" + utils.formateDate(new Date(row.endTime),"yyyy-MM-dd");
+            data.applyStateName = {
+                1:'待审批',
+                2:'审批中',
+                3:'审批拒绝',
+                4:'审批通过',
+                5:'作废'
+            }[data.applyState]
+            detail.value = data;
+            showDetailModal.value = true
+            
+        }
+        const handleDetailDelete =async (_id)=>{
+            let params = {_id,action:"delete"}
+            await proxy.$api.leaveOperate(params)
+            ElMessage.success('删除成功');
+            getApplyList();
+        }
+
 
         
         return {
@@ -295,13 +351,17 @@ export default {
             action,
             leaveForm,
             rules,
+            showDetailModal,
+            detail,
             handleReset,
             handleCurrentChange,
             getApplyList,
             handleApply,
             handleClose,
             handleSubmit,
-            handleDateChange
+            handleDateChange,
+            handleShowDetail,
+            handleDetailDelete
         }
     }
 }
