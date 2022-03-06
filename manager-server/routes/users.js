@@ -164,7 +164,7 @@ router.get('/all/list', async (ctx) => {
 router.get("/getPermissionList", async (ctx) => {
   //首先要对token解码(获取用户的角色)
   let authorization = ctx.request.headers.authorization;
-  let { data } = util.decode(authorization)
+  let { data } = util.decoded(authorization)
   let menuList = await getMenuList(data.role, data.roleList)
   //防止下边的getActionList内的语句对menuList本身造成影响，所以下面使用深拷贝使其变成一个新的对象
   let actionList = getActionList(JSON.parse(JSON.stringify(menuList)))

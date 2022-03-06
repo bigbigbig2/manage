@@ -44,7 +44,7 @@ module.exports = {
         }
     },
     CODE,
-    decode(authorization) {
+    decoded(authorization) {
         if (authorization) {
             let token = authorization.split(' ')[1]
             return jwt.verify(token,'mytoken')
