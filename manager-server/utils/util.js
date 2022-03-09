@@ -52,27 +52,49 @@ module.exports = {
         return '';
     },
     getTreeMenu(rootList, id, list) {
-    //遍历一级菜单（使用判断，如果它的parentId为Null则它为一级菜单，然后添加到list中
-    for (let i = 0; i < rootList.length; i++) {
-        let item = rootList[i]
-        if (String(item.parentId.slice().pop()) == String(id)) {
-            console.log('item=>',item)
-            list.push(item._doc)
+        //遍历一级菜单（使用判断，如果它的parentId为Null则它为一级菜单，然后添加到list中
+        for (let i = 0; i < rootList.length; i++) {
+            let item = rootList[i]
+            if (String(item.parentId.slice().pop()) == String(id)) {
+                console.log('item=>',item)
+                list.push(item._doc)
+            }
         }
+        //在递归遍历下一层数组
+        list.map(item => {
+            item.children = []
+            this.getTreeMenu(rootList, item._id, item.children)
+            if (item.children.length == 0) {
+                delete item.children;
+            } else if (item.children.length > 0 && item.children[0].menuType == 2) {
+                // 快速区分按钮和菜单，用于后期做菜单按钮权限控制
+                item.action = item.children;
+            }
+        })
+        return list;
+    },
+    //日期时间格式化
+    formateDate(date, rule) {
+        let fmt = rule || 'yyyy-MM-dd hh:mm:ss'
+        if (/(y+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, date.getFullYear())
+        }
+        const o = {
+            // 'y+': date.getFullYear(),
+            'M+': date.getMonth() + 1,
+            'd+': date.getDate(),
+            'h+': date.getHours(),
+            'm+': date.getMinutes(),
+            's+': date.getSeconds()
+        }
+        for (let k in o) {
+            if (new RegExp(`(${k})`).test(fmt)) {
+                const val = o[k] + '';
+                fmt = fmt.replace(RegExp.$1, RegExp.$1.length == 1 ? val : ('00' + val).substr(val.length));
+            }
+        }
+        return fmt;
     }
-    //在递归遍历下一层数组
-    list.map(item => {
-        item.children = []
-        this.getTreeMenu(rootList, item._id, item.children)
-        if (item.children.length == 0) {
-            delete item.children;
-        } else if (item.children.length > 0 && item.children[0].menuType == 2) {
-            // 快速区分按钮和菜单，用于后期做菜单按钮权限控制
-            item.action = item.children;
-        }
-    })
-    return list;
-}
 
 
 }

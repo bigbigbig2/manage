@@ -141,7 +141,7 @@ export default {
         const {proxy } = getCurrentInstance();
         //初始化用户表单对象
         const queryForm = reactive({
-            applyState:""
+            applyState:''
         })
         //初始化分页对象
         const pager = reactive({
@@ -280,7 +280,7 @@ export default {
         const handleSubmit=()=>{
             proxy.$refs.dialogForm.validate(async (valid) => {
                 if(valid){
-                    let params = {...queryForm,action:action.value}
+                    let params = {action:action.value}
                     let res = await proxy.$api.leaveOperate(params)
                     ElMessage.success('创建成功');
                     handleClose();

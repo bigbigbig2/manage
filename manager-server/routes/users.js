@@ -57,7 +57,9 @@ router.get('/list',async (ctx)=>{
   if (userName) params.userName = userName;
   if (state && state!='0') params.state = state;
   //根据条件查询所有的用户列表
-  const query = User.find(params,{_id:0,userPwd:0}) //过滤掉这两个字段
+  const query = User.find(params, { _id: 0, userPwd: 0 }) //过滤掉这两个字段
+  console.log("cccccccccccccccccccccc", skipIndex)
+  console.log("ddddddddddddddddddddddd",page.pageSize)
   const list = await query.skip(skipIndex).limit(page.pageSize) //达到分页效果：通过拿到当前在第几页和起始数据
   //统计获取用户的总条数
   const total = await User.countDocuments(params);//mongoose自带API
