@@ -60,6 +60,14 @@ const routes=[
                 },
                 component:()=>import('@/views/Leave.vue')
             },
+            {
+                name:'approve',
+                path:'/audit/approve',
+                meta:{
+                    title:'待审批'
+                },
+                component:()=>import('@/views/Approve.vue')
+            },
 
 
         ]

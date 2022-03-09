@@ -146,6 +146,14 @@ export default{
             data: params,
             mock:false
         })
+    },
+    leaveApplay(params) {
+        return request({
+            url: '/leave/approve', 
+            method: 'post',
+            data: params,
+            mock:false
+        })
     }
 
 }

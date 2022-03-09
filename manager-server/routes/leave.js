@@ -6,29 +6,40 @@ router.prefix('/leave')
 
 //获取申请列表
 router.get('/list', async (ctx) => {
-    const { applyState } = ctx.request.query;
+    const { applyState,type} = ctx.request.query;
     const { page, skipIndex } = util.paper(ctx.request.query);
     let authorization = ctx.request.headers.authorization;
     let { data } = util.decoded(authorization)
-    // console.log("tttttttttttttttttttt",data.userId)
-    // try {
-    let params = {
-        "applyUser.userId":data.userId
+    try { 
+        let params = {};
+        if (type == 'approve') {
+            if (applyState == 1) {
+                params.curAuditUserName = data.userName;
+                params.applyState = 1;
+            } else if(applyState> 1) {
+                params = {"applyUser.userId":data.userId,applyState}
+            } else {
+                params = {"applyUser.userId":data.userId}
+            }
+        } else {
+            params = {"applyUser.userId":data.userId}
+        }
+            
+        
+        if (applyState) params.applyState = applyState;
+        const query = Leave.find(params)
+        const list = await query.skip(skipIndex).limit(page.pageSize)
+        const total = await Leave.countDocuments(params);
+        ctx.body = util.sucess({ 
+            page: {
+                ...page,
+                total
+            },
+            list
+        })
+    }catch(e) {
+        ctx.body = util.fail(`查询失败：${e.stack}`)
     }
-    if (applyState) params.applyState = applyState;
-    const query = Leave.find(params)
-    const list = await query.skip(skipIndex).limit(page.pageSize)
-    const total = await Leave.countDocuments(params);
-    ctx.body = util.sucess({ 
-        page: {
-            ...page,
-            total
-        },
-        list
-    })
-    // }catch(e) {
-    //     ctx.body = util.fail(`查询失败：${e.stack}`)
-    // }
 })
 
 router.post('/operate', async (ctx) => {
