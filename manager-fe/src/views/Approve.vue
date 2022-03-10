@@ -8,8 +8,8 @@
                     <el-option :value="1" label="待审批"></el-option>
                     <el-option :value="2" label="审批中"></el-option>
                     <el-option :value="3" label="审批拒绝"></el-option>
-                    <el-option :value="3" label="审批通过"></el-option>
-                    <el-option :value="3" label="作废"></el-option>
+                    <el-option :value="4" label="审批通过"></el-option>
+                    <el-option :value="5" label="作废"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item>
@@ -69,13 +69,13 @@
                 <div>{{detail.curAuditUserName}}</div> 
             </el-form-item>
             <el-form-item label="备注" prop="remark">
-                <el-input type="textarea" :rows="3" placeholder="请输入审核备注" auditForm="remark"></el-input>
+                <el-input type="textarea" :rows="3" placeholder="请输入审核备注" v-model="auditForm.remark"></el-input>
             </el-form-item>
         </el-form>
         <template #footer>
             <span class="dialog-footer">
-                <el-button @click="handleApprove('pass')">审核通过</el-button>
-                <el-button type="primary" @click="handleApprove('refuse')" >审核拒绝</el-button>
+                <el-button  @click="handleApprove('refuse')" >审核拒绝</el-button>
+                <el-button type="primary" @click="handleApprove('pass')">审核通过</el-button>   
             </span>
         </template>
     </el-dialog>
@@ -106,6 +106,10 @@ export default {
             {
                 label:'单号',
                 prop:'orderNo'
+            },
+            {
+                label:'申请人',
+                prop:'applyUser.userName',
             },
             {
                 label:'休假时间',
@@ -160,7 +164,8 @@ export default {
                         5:'作废'
                     }[value]
                 }
-            }
+            },
+            
         ])
         //休假申请填写表单
         const leaveForm =reactive ({
@@ -204,7 +209,7 @@ export default {
         
         //获取申请列表
         const getApplyList = async ()=>{
-            let params = {...queryForm,...pager}
+            let params = {...queryForm,...pager,type:"approve"}
             let { list , page }=await proxy.$api.getApplayList(params)
             applyList.value = list;
             pager.total = page.total
@@ -214,7 +219,7 @@ export default {
             proxy.$refs[form].resetFields()
         }
         const handleClose = ()=>{
-            showDetailModal.value = true;
+            showDetailModal.value = false;
             handleReset('dialogForm')
         }
         //提交表单
@@ -261,15 +266,14 @@ export default {
                 if(valid){
                     let params = {action,remark:auditForm.remark,_id:detail.value._id}
                     try{
-                        let res = await proxy.$api.leaveApprove(params)
-                        if(res){
-                            handleClose();
-                            ElMessage.success('操作成功');
-                            getApplyList();
-                        }
+                        await proxy.$api.leaveApprove(params)
+                        handleClose();
+                        ElMessage.success('操作成功');
+                        getApplyList();
+                        proxy.$store.commit("saveNoticeCount",proxy.$store.state.noticeCount-1);
                         
                     }catch(e){
-
+                        console.log(e)
                     }
                 }
             })

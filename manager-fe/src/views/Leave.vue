@@ -8,8 +8,8 @@
                     <el-option :value="1" label="待审批"></el-option>
                     <el-option :value="2" label="审批中"></el-option>
                     <el-option :value="3" label="审批拒绝"></el-option>
-                    <el-option :value="3" label="审批通过"></el-option>
-                    <el-option :value="3" label="作废"></el-option>
+                    <el-option :value="4" label="审批通过"></el-option>
+                    <el-option :value="5" label="作废"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item>
@@ -280,7 +280,13 @@ export default {
         const handleSubmit=()=>{
             proxy.$refs.dialogForm.validate(async (valid) => {
                 if(valid){
-                    let params = {action:action.value}
+                    let params = {
+                        action:action.value,
+                        leaveTime:leaveForm.leaveTime,
+                        reasons:leaveForm.reasons,
+                        applyType:leaveForm.applyType
+                        
+                    }
                     let res = await proxy.$api.leaveOperate(params)
                     ElMessage.success('创建成功');
                     handleClose();

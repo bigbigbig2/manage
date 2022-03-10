@@ -11,12 +11,12 @@ export default{
         })
 
     },
-    noticeCount(){ //请求的是通知数量
+    noticeCount(params){ //请求的是通知数量
         return request({
             url:'/leave/count',
             method:'get',
-            data:{},
-            mock:true
+            data:params,
+            mock:false
         })
     },
     getMenuList(params){
@@ -147,7 +147,7 @@ export default{
             mock:false
         })
     },
-    leaveApplay(params) {
+    leaveApprove(params) {
         return request({
             url: '/leave/approve', 
             method: 'post',

@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 //用户表结构（各个字段及类型）
 const leaveSchema = mongoose.Schema({
     orderNo: String,
-    applayType: Number,
+    applyType: Number,
     startTime: {type:Date, default: Date.now },
     endTime:{type:Date,default: Date.now},
     applyUser: {

@@ -17,6 +17,11 @@ export default {
       activeMenu: location.hash.slice(1), //获取当前页面url地址来渲染到到当前点击的menu
     };
   },
+  computed:{
+    noticeCount(){
+      return this.$store.state.noticeCount;
+    }
+  },
   methods: {
     toggle() {
       this.isCollapse = !this.isCollapse;
@@ -28,9 +33,9 @@ export default {
       this.userInfo = {};
       this.$router.push("/login");
     },
-    getNoticeCount() {
-        const count = this.$api.noticeCount(); //接口返回的通知数量值
-        this.noticeCount = count;
+    async getNoticeCount() {
+        const count =await this.$api.noticeCount(); //接口返回的通知数量值
+        this.$store.commit("saveNoticeCount",count);
     },
     //获取菜单列表
     async getMenuList() {
@@ -45,8 +50,9 @@ export default {
     },
   },
   mounted() {
-    //this.getNoticeCount();
+    this.getNoticeCount();
     this.getMenuList();
+    console.log(this.noticeCount)
   },
 };
 </script>
@@ -88,16 +94,16 @@ export default {
         <div class="user-info">
           <!-- 图标有信息时的小红点 -->
           <el-badge
-            :is-dot="noticeCount > 0 ? true : false"
+            :is-dot="noticeCount"
             class="notice"
             type="danger"
+            @click="$router.push('/audit/approve')"
           >
             <el-icon><bell /></el-icon>
           </el-badge>
           <el-dropdown @command="handleLogout">
             <span class="user-link">
               {{ userInfo.userName }}
-              <!-- <i class="el-icon--right"></i> -->
             </span>
             <template #dropdown>
               <el-dropdown-menu>
@@ -208,6 +214,7 @@ export default {
         .notice {
           line-height: 30px;
           margin-right: 15px;
+          cursor: pointer;
         }
         .user-link {
           cursor: pointer;
