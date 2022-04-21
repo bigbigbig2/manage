@@ -38,23 +38,7 @@ export default{
     login(){
       this.$refs.userForm.validate((valid)=>{
         //点击登录时先校验是否输入用户名和密码
-        
         if(valid){
-          //方法一，直接使用封装好的request发送请求 
-          // this.$request({
-          //   url:'/users/login',
-          //   method:'post',
-          //   data:this.user,
-          //   mock:false
-          // }).then((res) =>{
-          //   //登录成功后将返回的数据存储到vuex和localstorage中
-          //   this.$store.commit('saveUserInfo',res);
-          //   //登录成功后跳转到首页
-          //   this.$router.push('/welcome');
-          // })
-
-          //方法二(推荐)：在api/index.js中集中管理
-          //console.log(this.$store.state.userInfo)
           this.$api.login(this.user).then((res)=>{
             //console.log(res)
             this.$store.commit("saveUserInfo", res);
@@ -74,7 +58,7 @@ export default{
     <!-- 登录框 -->
     <div class="modal">  
       <el-form ref="userForm" :model="user" status-icon :rules="rules">
-        <div class="title">火星</div>
+        <div class="title">用户登录</div>
         <el-form-item prop="userName">
           <el-input type="text" :prefix-icon="Avatar" v-model="user.userName"/>
         </el-form-item>

@@ -13,7 +13,8 @@ const levels = {
 }
 
 log4js.configure({
-    appenders:{
+    appenders: {
+        //定义多个追加器
         console:{
             type:'console'
         },
@@ -30,8 +31,8 @@ log4js.configure({
 
     },
     categories:{
-        default:{appenders:['console'], level:'debug'},
-        error:{
+        default:{appenders:['console'], level:'debug'},//配置当没有给实例传递参数时的默认categories
+        error:{ //传递error时
             appenders:['console','error'],
             level:'error'
         },

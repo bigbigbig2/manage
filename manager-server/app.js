@@ -22,7 +22,7 @@ onerror(app)
 
 // middlewares
 app.use(bodyparser({
-  enableTypes:['json', 'form', 'text'] //可以接受各种格式的请求
+  enableTypes:['json', 'form', 'text'] //可以前端接受各种格式的请求
 }))
 app.use(json())
 
@@ -33,12 +33,12 @@ app.use(views(__dirname + '/views', {
   extension: 'pug'
 }))
 
-// logger
+// logger自己写的中间件
 app.use(async (ctx, next) => {
   // const start = new Date()
   await next().catch((err)=>{
     if(err.status == '401'){
-      ctx.status = 200;
+      ctx.status = 200;//设置请求正常
       ctx.body = util.fail('Token认证失败',util.CODE.AUTH_ERROR)
     }else{
       throw err;

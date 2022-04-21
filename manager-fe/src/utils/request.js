@@ -16,7 +16,7 @@ const service = axios.create({
 //请求拦截(拦截下来给它添加token)
 service.interceptors.request.use((req)=>{
     const headers = req.headers;
-    console.log(headers)
+    // console.log(headers)
     const {token} = storage.getItem('userInfo')||'';
     if (!headers.Authorization) headers.Authorization = 'Bearer ' + token
     return req;
@@ -32,7 +32,7 @@ service.interceptors.response.use((res)=>{
         ElMessage.error(TOKEN_INVALID)
         setTimeout(()=>{
             router.push('/login')
-        },1500)
+        },1000)
         return Promise.reject(TOKEN_INVALID) //这将显示在控制台里
     }else{
         ElMessage.error(msg || NETWORK_ERROR)
@@ -59,15 +59,5 @@ function request(options){
     }
     return service(options)
 }
-['get', 'post', 'put', 'delete', 'patch'].forEach((item) => {
-    request[item] = (url, data, options) => {
-        return request({
-            url,
-            data,
-            method: item,
-            ...options
-        })
-    }
-})
 
 export default request;

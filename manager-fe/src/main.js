@@ -9,9 +9,6 @@ import api from './api'
 import store from './store'
 console.log("环境变量=>", import.meta.env);
 const app= createApp(App)
-// axios.get(config.mockApi + '/login').then((res)=>{
-//     console.log(res)
-// })
 
 app.directive('has', {
     beforeMount(el, binding) {

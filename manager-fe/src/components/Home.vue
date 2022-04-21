@@ -225,12 +225,10 @@ export default {
     .wrapper {
       background: #eef0f3;
       padding: 20px;
-      // height: calc(100vh - 50px);
       height: 100%;
       .main-page {
         background: #fff;
         height: 100%;
-        // height: calc(100vh - 50px);
       }
     }
   }

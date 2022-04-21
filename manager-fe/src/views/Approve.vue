@@ -90,7 +90,7 @@ export default {
     name:'approve',
     setup(){
         //获取composition api上下文对象
-        const {proxy } = getCurrentInstance();
+        const {proxy} = getCurrentInstance();
         //初始化用户表单对象
         const queryForm = reactive({
             applyState:1

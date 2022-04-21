@@ -19,8 +19,7 @@ const EnvConfig = {
 } 
 export default {
     env,
-    mock:false  , //设为false便可以联调后端接口了,就不是请求mock接口了
-    //baseApi:'www.baudu.com/api' 变为动态的了baseApi了调用上面的
+    mock:false  ,
     namespace:'manager',
-    ...EnvConfig[env]
+    ...EnvConfig[env]//baseApi,mockApi
 }
