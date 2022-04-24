@@ -34,3 +34,29 @@
 包含角色的创建，角色的菜单控制权限
 
 ![角色管理](https://cdn.jsdelivr.net/gh/bigbigbig2/image2/img/202204212312996.gif)
+
+## 审批管理部分
+
+当前用户发出休假申请，需要其部门负责人及财务部门负责人登录管理系统后进行审批
+
+![image-20220424221450464](https://cdn.jsdelivr.net/gh/bigbigbig2/image2/img/202204242214109.png)
+
+![image-20220424222127189](https://cdn.jsdelivr.net/gh/bigbigbig2/image2/img/202204242221831.png)
+
+例如登录WEBGIS部门的漩涡鸣人发起休假申请。
+
+![休假申请](C:/Users/ooco/Desktop/后台管理系统/休假申请.gif)
+
+然后登入其负责人雏田进行审批
+
+![休假审批](https://cdn.jsdelivr.net/gh/bigbigbig2/image2/img/202204242224862.gif)
+
+![image-20220424222705050](C:/Users/ooco/AppData/Roaming/Typora/typora-user-images/image-20220424222705050.png)
+
+在登录我爱罗进行审批
+
+![image-20220424223159824](C:/Users/ooco/AppData/Roaming/Typora/typora-user-images/image-20220424223159824.png)
+
+最后在登上漩涡鸣人查看审批状态
+
+![image-20220424223323870](https://cdn.jsdelivr.net/gh/bigbigbig2/image2/img/202204242233790.png)
