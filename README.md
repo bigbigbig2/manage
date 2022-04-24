@@ -45,17 +45,17 @@
 
 例如登录WEBGIS部门的漩涡鸣人发起休假申请。
 
-![休假申请](C:/Users/ooco/Desktop/后台管理系统/休假申请.gif)
+![休假申请](https://cdn.jsdelivr.net/gh/bigbigbig2/image2/img/202204242235984.gif)
 
 然后登入其负责人雏田进行审批
 
 ![休假审批](https://cdn.jsdelivr.net/gh/bigbigbig2/image2/img/202204242224862.gif)
 
-![image-20220424222705050](C:/Users/ooco/AppData/Roaming/Typora/typora-user-images/image-20220424222705050.png)
+![image-20220424222705050](https://cdn.jsdelivr.net/gh/bigbigbig2/image2/img/202204242235018.png)
 
 在登录我爱罗进行审批
 
-![image-20220424223159824](C:/Users/ooco/AppData/Roaming/Typora/typora-user-images/image-20220424223159824.png)
+![image-20220424223159824](https://cdn.jsdelivr.net/gh/bigbigbig2/image2/img/202204242235103.png)
 
 最后在登上漩涡鸣人查看审批状态
 
